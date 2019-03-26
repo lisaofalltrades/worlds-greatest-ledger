@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/lisaofalltrades/worlds-greatest-ledger#readme",
   "dependencies": {
+    "colors": "^1.3.3",
     "readline-sync": "^1.4.9"
   }
 }

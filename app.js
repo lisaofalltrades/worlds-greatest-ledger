@@ -1,5 +1,6 @@
 // require
 const readlineSync = require('readline-sync')
+const colors = require('colors');
 
 // ******* //
 // classes //
