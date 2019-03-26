@@ -59,6 +59,15 @@ function makeDeposit(){
   console.log(starDivider + "Make a Deposit" + starDivider + "\n");
   // capture user input
   let amount = readlineSync.question("Please enter amount: ");
+  // if user has log
+  if (currentUser["log"]) {
+    // record transaction
+    currentUser["log"].push(['deposit', amount, Date.now()]);
+
+  }
+  console.log(currentUser);
+  // print confirmation message
+  console.log("You have deposited " + amount);
 };
 
 // user login
@@ -78,6 +87,10 @@ function checkUser() {
   } else { // if user is not in usersData, create account
     console.log("Creating account...\n");
     usersData[username] = new User (username, password);
+    // setting user's transaction logs to array
+    usersData[username]["log"] = []
+    // setting starting balance at 0
+    usersData[username]["accountBalance"] = 0
     console.log("Success! Welcome " + username + "!\n");
     // assign current user
     currentUser = usersData[username];
