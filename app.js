@@ -111,21 +111,37 @@ let viewTransactionHistory = function(){
 }
 
 function accountBalance() {
-  console.log(starDivider + "Account Balance" + starDivider + "\n");
+  console.log(starDivider + "\n" + "Account Balance" + starDivider + "\n");
 
+  // if there is a transaction history
   if (currentUser["log"].length > 0) {
     let transactionHistory = currentUser["log"];
-    var i;
-    for (i in transactionHistory) {
-      let category = transactionHistory[i][0];
-      let amount = transactionHistory[i][1];
 
-      console.log(category + ": " + amount);
+    var i;
+    // for each transaction
+    for (i in transactionHistory) {
+      // assign category to variable category
+      let category = transactionHistory[i][0];
+
+      // convert string to float w/ two decimal points and assign to amount
+      let amount = Math.round(transactionHistory[i][1] * 100) / 100;
+
+      // if category is deposit, add to amount
+      if (category === "deposit") {
+        currentUser["accountBalance"] += amount
+      // if category is withdrawal, subtract from amount
+      } else if (category === "withdrawal") {
+        currentUser["accountBalance"] -= amount
+      } // end if statement checking category
     } // end for loop
 
   } else {
     console.log("Sorry, you have not made any transactions.")
   }
+  // print account Balance
+  console.log("Your account balance is: $" + currentUser["accountBalance"] + "\n");
+
+  // take user back to main menu
   showMenu();
 }
 
