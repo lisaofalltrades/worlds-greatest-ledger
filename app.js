@@ -32,32 +32,7 @@ let starDivider = (" * ").repeat(5)
 // functions //
 // ********* //
 
-// user login
-function checkUser() {
-  // prompt for username
-  let username = readlineSync.question("Please enter your username: ");
-  // prompt for password
-  let password = readlineSync.question("Please enter your password: ", { hideEchoBack: true });
-
-  // if user is in usersData
-  if (usersData[username]) {
-    // check password
-    console.log("Loggin in...");
-    if (usersData[username]["password"] === password) {
-      let password = readlineSync.question("Incorrect password. Please enter your password: ", { hideEchoBack: true });
-    }
-  } else { // if user is not in usersData, create account
-    console.log("Creating account...\n");
-    usersData[username] = new User (username, password);
-    console.log("Success! Welcome " + username + "!\n");
-    // assign current user
-    currentUser = usersData[username];
-    // console.log(currentUser);
-    // console.log(usersData);
-  }
-  showMenu();
-} // end user login
-
+// user menu once logged in
 function showMenu(username) {
   console.log(starDivider + "Main Menu" + starDivider + "\n");
   console.log("Please select from the options below: ");
@@ -79,6 +54,52 @@ function showMenu(username) {
       break;
  }
 }
+
+function makeDeposit(){
+  console.log(starDivider + "Make a Deposit" + starDivider + "\n");
+  // capture user input
+  let amount = readlineSync.question("Please enter amount: ");
+
+  // record transaction
+  currentUser["log"].push(['deposit', amount, Date.now()]);
+
+  // print confirmation message
+  console.log("You have deposited " + amount);
+
+  showMenu();
+};
+
+// user login
+function checkUser() {
+  // prompt for username
+  let username = readlineSync.question("Please enter your username: ");
+  // prompt for password
+  let password = readlineSync.question("Please enter your password: ", { hideEchoBack: true });
+
+  // if user is in usersData
+  if (usersData[username]) {
+    // check password
+    console.log("Loggin in...");
+    if (usersData[username]["password"] === password) {
+      let password = readlineSync.question("Incorrect password. Please enter your password: ", { hideEchoBack: true });
+    }
+  } else { // if user is not in usersData, create account
+    console.log("Creating account...\n");
+    usersData[username] = new User (username, password);
+    // setting user's transaction logs to array
+    usersData[username]["log"] = []
+    // setting starting balance at 0
+    usersData[username]["accountBalance"] = 0
+    console.log("Success! Welcome " + username + "!\n");
+    // assign current user
+    currentUser = usersData[username];
+    // console.log(currentUser);
+    // console.log(usersData);
+  }
+  showMenu();
+} // end user login
+
+
 
 function openLedger() {
   // weclome message
