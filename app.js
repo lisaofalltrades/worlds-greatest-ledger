@@ -83,6 +83,30 @@ function makeWithdrawl() {
   showMenu();
 }
 
+let viewTransactionHistory = function(){
+  console.log(starDivider + "Transaction History" + starDivider + "\n");
+
+  if (currentUser["log"].length > 0) {
+    let transactionHistory = currentUser["log"];
+    var i;
+    for (i in transactionHistory) {
+      let category = transactionHistory[i][0];
+      let amount = transactionHistory[i][1];
+      let date = new Date(transactionHistory[i][2]).toLocaleDateString("en-US");
+
+      if (category === "deposit") {
+        console.log(date + " + $" + amount);
+      } else if (category === "withdrawal") {
+        console.log(date + " - $" + amount);
+      } // end if category statement
+    } // end for loop
+
+  } else {
+    console.log("Sorry, you have not made any transactions.")
+  }
+  showMenu();
+}
+
 // user login
 function checkUser() {
   // prompt for username
