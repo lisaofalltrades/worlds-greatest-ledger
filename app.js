@@ -59,15 +59,14 @@ function makeDeposit(){
   console.log(starDivider + "Make a Deposit" + starDivider + "\n");
   // capture user input
   let amount = readlineSync.question("Please enter amount: ");
-  // if user has log
-  if (currentUser["log"]) {
-    // record transaction
-    currentUser["log"].push(['deposit', amount, Date.now()]);
 
-  }
-  console.log(currentUser);
+  // record transaction
+  currentUser["log"].push(['deposit', amount, Date.now()]);
+
   // print confirmation message
   console.log("You have deposited " + amount);
+
+  showMenu();
 };
 
 // user login
