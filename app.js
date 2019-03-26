@@ -32,6 +32,35 @@ let starDivider = (" * ").repeat(5)
 // functions //
 // ********* //
 
+// user menu once logged in
+function showMenu(username) {
+  console.log(starDivider + "Main Menu" + starDivider + "\n");
+  console.log("Please select from the options below: ");
+  let index = readlineSync.keyInSelect(mainMenu)
+
+  switch (index+1) {
+    case 1:
+      makeDeposit();
+      break;
+    case 2:
+      makeWithdrawl();
+      break;
+    case 3:
+      viewTransactionHistory();
+      break;
+    case 4:
+      console.log("Log Out");
+      checkUser();
+      break;
+ }
+}
+
+function makeDeposit(){
+  console.log(starDivider + "Make a Deposit" + starDivider + "\n");
+  // capture user input
+  let amount = readlineSync.question("Please enter amount: ");
+};
+
 // user login
 function checkUser() {
   // prompt for username
@@ -58,27 +87,7 @@ function checkUser() {
   showMenu();
 } // end user login
 
-function showMenu(username) {
-  console.log(starDivider + "Main Menu" + starDivider + "\n");
-  console.log("Please select from the options below: ");
-  let index = readlineSync.keyInSelect(mainMenu)
 
-  switch (index+1) {
-    case 1:
-      makeDeposit();
-      break;
-    case 2:
-      makeWithdrawl();
-      break;
-    case 3:
-      viewTransactionHistory();
-      break;
-    case 4:
-      console.log("Log Out");
-      checkUser();
-      break;
- }
-}
 
 function openLedger() {
   // weclome message
