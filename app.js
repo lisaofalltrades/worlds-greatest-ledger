@@ -23,6 +23,7 @@ let currentUser;
 let mainMenu = [
   "Make a Deposit",
   "Make a Withdrawal",
+  "Account Balance",
   "View Transaction History",
   "Log Out"
 ]
@@ -46,9 +47,11 @@ function showMenu(username) {
       makeWithdrawl();
       break;
     case 3:
-      viewTransactionHistory();
+      accountBalance();
       break;
     case 4:
+      viewTransactionHistory();
+    case 5:
       console.log("Log Out");
       checkUser();
       break;
@@ -99,6 +102,25 @@ let viewTransactionHistory = function(){
       } else if (category === "withdrawal") {
         console.log(date + " - $" + amount);
       } // end if category statement
+    } // end for loop
+
+  } else {
+    console.log("Sorry, you have not made any transactions.")
+  }
+  showMenu();
+}
+
+function accountBalance() {
+  console.log(starDivider + "Account Balance" + starDivider + "\n");
+
+  if (currentUser["log"].length > 0) {
+    let transactionHistory = currentUser["log"];
+    var i;
+    for (i in transactionHistory) {
+      let category = transactionHistory[i][0];
+      let amount = transactionHistory[i][1];
+
+      console.log(category + ": " + amount);
     } // end for loop
 
   } else {
