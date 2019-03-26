@@ -28,7 +28,10 @@ let mainMenu = [
   "View Transaction History",
   "Log Out"
 ]
-let starDivider = (" * ").repeat(5)
+let noTransactionsMsg = colors.yellow("Sorry, you have not made any transactions.");
+let plsDepositMsg = colors.bold("Please enter amount: $");
+
+let starDivider = (" * ").repeat(5);
 
 // ********* //
 // functions //
@@ -36,8 +39,8 @@ let starDivider = (" * ").repeat(5)
 
 // user menu once logged in
 function showMenu(username) {
-  console.log("\n" + starDivider + "Main Menu" + starDivider + "\n");
-  console.log("Please select from the options below: ");
+  console.log(colors.bold.underline("\nMain Menu\n"));
+  console.log(colors.bold("Please select from the options below: "));
   let index = readlineSync.keyInSelect(mainMenu)
 
   switch (index+1) {
@@ -60,9 +63,9 @@ function showMenu(username) {
 }
 
 function makeDeposit(){
-  console.log("\n" + starDivider + "Make a Deposit" + starDivider + "\n");
+  console.log(colors.bold.underline("\nMake a Deposit\n"));
   // capture user input
-  let amount = readlineSync.question("Please enter amount: $");
+  let amount = readlineSync.question(plsDepositMsg);
 
   // record transaction
   currentUser["log"].push(['deposit', amount, Date.now()]);
@@ -74,9 +77,9 @@ function makeDeposit(){
 };
 
 function makeWithdrawl() {
-  console.log("\n" + starDivider + "Make a Withdrawal" + starDivider + "\n");
+  console.log(colors.bold.underline("\nMake a Withdrawal\n"));
   // capture user input
-  let amount = readlineSync.question("Please enter amount: $");
+  let amount = readlineSync.question(plsDepositMsg);
 
   // record transaction
   currentUser["log"].push(['withdrawal', amount, Date.now()]);
@@ -88,7 +91,7 @@ function makeWithdrawl() {
 }
 
 let viewTransactionHistory = function(){
-  console.log(starDivider + "Transaction History" + starDivider + "\n");
+  console.log(colors.bold.underline("\nTransaction History\n"));
 
   if (currentUser["log"].length > 0) {
     let transactionHistory = currentUser["log"];
@@ -99,20 +102,20 @@ let viewTransactionHistory = function(){
       let date = new Date(transactionHistory[i][2]).toLocaleDateString("en-US");
 
       if (category === "deposit") {
-        console.log(date + " + $" + amount);
+        console.log(colors.green(date + " + $" + amount));
       } else if (category === "withdrawal") {
-        console.log(date + " - $" + amount);
+        console.log(colors.red(date + " - $" + amount));
       } // end if category statement
     } // end for loop
 
   } else {
-    console.log("Sorry, you have not made any transactions.")
+    console.log(colors.yellow(noTransactionsMsg))
   }
   showMenu();
 }
 
 function accountBalance() {
-  console.log("\n" + starDivider + "Account Balance" + starDivider);
+  console.log(colors.bold.underline("\nAccount Balance\n"));
 
   // if there is a transaction history
   if (currentUser["log"].length > 0) {
@@ -137,10 +140,10 @@ function accountBalance() {
     } // end for loop
 
   } else {
-    console.log("Sorry, you have not made any transactions.")
+    console.log(noTransactionsMsg)
   }
   // print account Balance
-  console.log("Your account balance is: $" + currentUser["accountBalance"] + "\n");
+  console.log("Your account balance is: $" + colors.bold(currentUser["accountBalance"]));
 
   // take user back to main menu
   showMenu();
