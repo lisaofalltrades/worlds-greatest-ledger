@@ -69,6 +69,20 @@ function makeDeposit(){
   showMenu();
 };
 
+function makeWithdrawl() {
+  console.log(starDivider + "Make a Withdrawal" + starDivider + "\n");
+  // capture user input
+  let amount = readlineSync.question("Please enter amount: ");
+
+  // record transaction
+  currentUser["log"].push(['withdrawal', amount, Date.now()]);
+
+  // print confirmation message
+  console.log("You have withdrawn " + amount);
+
+  showMenu();
+}
+
 // user login
 function checkUser() {
   // prompt for username
