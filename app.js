@@ -56,8 +56,8 @@ function showMenu(username) {
     case 4:
       viewTransactionHistory();
     case 5:
-      console.log("Log Out");
-      checkUser();
+      console.log("Logging out...");
+      openLedger();
       break;
  }
 }
@@ -149,20 +149,36 @@ function accountBalance() {
   showMenu();
 }
 
+function checkPassword() {
+  let password = readlineSync.question("Incorrect password. Please enter your password: ", { hideEchoBack: true });
+  return password;
+}
+
 // user login
 function checkUser() {
+  let passwordCount = 0;
   // prompt for username
   let username = readlineSync.question("Please enter your username: ");
+
+  // if user is in usersData
+  if(username === ""){
+    readlineSync.question("Username can not be blank: ");
+  }
+
   // prompt for password
   let password = readlineSync.question("Please enter your password: ", { hideEchoBack: true });
 
-  // if user is in usersData
   if (usersData[username]) {
     // check password
-    console.log("Loggin in...");
-    if (usersData[username]["password"] === password) {
-      let password = readlineSync.question("Incorrect password. Please enter your password: ", { hideEchoBack: true });
+    console.log("Please wait while we verify your account...");
+    if (usersData[username]["password"] !== password) {
+      checkPassword();
+      passwordCount +=1;
     }
+    // else if(passwordCount >= 4){
+    //     console.log("You have reached the maximum number of tries. Please try again later");
+    //     openLedger();
+    // }
   } else { // if user is not in usersData, create account
     console.log("\nCreating account...\n");
     usersData[username] = new User (username, password);
