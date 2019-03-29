@@ -34,6 +34,7 @@ class User {
 let usersData = {};
 let currentUser;
 let regexCurrenyCheck = /^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/;
+let regexUserInfoCheck = /^[a-zA-Z0-9_]*$/
 let mainMenu = [
   "Make a Deposit",
   "Make a Withdrawal",
@@ -54,8 +55,11 @@ let starDivider = (" * ").repeat(5);
 function showMenu() {
   console.log(colors.bold.underline("\nMain Menu\n"));
   console.log(colors.bold("Please select from the options below: "));
+
+  // capture user input
   let index = readlineSync.keyInSelect(mainMenu)
 
+  // since mainMenu is array, add 1 to index selected
   switch (index+1) {
     case 1:
       makeDeposit();
@@ -77,6 +81,7 @@ function showMenu() {
 
 function makeDeposit(){
   console.log(colors.bold.underline("\nMake a Deposit\n"));
+
   // capture user input
   let amount = readlineSync.question(plsDepositMsg);
 
@@ -99,6 +104,7 @@ function makeDeposit(){
 
 function makeWithdrawl() {
   console.log(colors.bold.underline("\nMake a Withdrawal\n"));
+
   // capture user input
   let amount = readlineSync.question(plsDepositMsg);
 
@@ -124,17 +130,21 @@ function makeWithdrawl() {
 let viewTransactionHistory = function(){
   console.log(colors.bold.underline("\nTransaction History\n"));
 
+  // if there is a log
   if (currentUser["log"].length > 0) {
     let transactionHistory = currentUser["log"];
     var i;
+    // for each transaction in transactionHistory
     for (i in transactionHistory) {
       let category = transactionHistory[i][0];
       let amount = transactionHistory[i][1];
       let date = new Date(transactionHistory[i][2]).toLocaleDateString("en-US");
 
+      // if category is deposit, print amount with +
       if (category === "deposit") {
         console.log(colors.green(date + " + $" + amount));
       } else if (category === "withdrawal") {
+        // else if category is withdrawal, print amount with -
         console.log(colors.red(date + " - $" + amount));
       } // end if category statement
     } // end for loop
@@ -179,38 +189,39 @@ function showAccountBalance() {
 
   calculateAccountBalance()
 
+  // round to two places after the decimal
   let amount = Math.round(currentUser["accountBalance"] * 100) / 100;
+
   // if there is a transaction history
   if (currentUser["log"].length > 0) {
     // print account Balance
     console.log(colors.yellow("Your account balance is: $" + amount));
   } else {
+    // else print an error msg
     console.log(noTransactionsMsg)
   }
-
   // take user back to main menu
   showMenu();
 }
 
 // user login
 function checkUser() {
-  let regex = "^\\s+$";
 
   let passwordCount = 2;
   // prompt for username
   let username = readlineSync.question("Please enter your username: ");
 
-  // if username is blank, throw error
-  while (username === ""){
-    username = readlineSync.question("Username can not be blank: ");
+  // username validation
+  while (regexUserInfoCheck.test(username) === false){
+    username = readlineSync.question("Username can only contain letters, numbers, and underscores: ");
   }
 
   // prompt for password
   let password = readlineSync.question("Please enter your password: ", { hideEchoBack: true });
 
-  // if password is blank, throw error
-  while (password === ""){
-    password = readlineSync.question("Password cannot be blank: ", { hideEchoBack: true });
+  // password validation
+  while (regexUserInfoCheck.test(password) === false){
+    password = readlineSync.question("Password can only contain letters, numbers, and underscores: ", { hideEchoBack: true });
   }
 
   // if user is in usersData
