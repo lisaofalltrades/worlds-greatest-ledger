@@ -159,11 +159,6 @@ function accountBalance() {
   showMenu();
 }
 
-function checkPassword() {
-  let password = readlineSync.question("Incorrect password. Please enter your password: ", { hideEchoBack: true });
-  return password;
-}
-
 // user login
 function checkUser() {
 
