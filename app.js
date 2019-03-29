@@ -179,10 +179,11 @@ function showAccountBalance() {
 
   calculateAccountBalance()
 
+  let amount = Math.round(currentUser["accountBalance"] * 100) / 100;
   // if there is a transaction history
   if (currentUser["log"].length > 0) {
     // print account Balance
-    console.log(colors.yellow("Your account balance is: $" + (currentUser["accountBalance"])));
+    console.log(colors.yellow("Your account balance is: $" + amount));
   } else {
     console.log(noTransactionsMsg)
   }
