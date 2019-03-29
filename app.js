@@ -1,6 +1,7 @@
 // require
 const colors = require('colors');
-const readlineSync = require('readline-sync')
+const readlineSync = require('readline-sync');
+const regex = require('regex');
 
 // catching readlineSync exit issues
 process.on('SIGINT', function() {
@@ -32,6 +33,7 @@ class User {
 
 let usersData = {};
 let currentUser;
+let regexCurrenyCheck = /^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/;
 let mainMenu = [
   "Make a Deposit",
   "Make a Withdrawal",
@@ -62,12 +64,12 @@ function showMenu(username) {
       makeWithdrawl();
       break;
     case 3:
-      accountBalance();
+     showAccountBalance();
       break;
     case 4:
       viewTransactionHistory();
     case 5:
-      console.log("Logging out...");
+      console.log("\nLogging out...");
       openLedger();
       break;
  }
@@ -78,16 +80,19 @@ function makeDeposit(){
   // capture user input
   let amount = readlineSync.question(plsDepositMsg);
 
-  // if amount is blank, throw error
-  while (amount === ""){
-    amount = readlineSync.question(colors.yellow("Amount can not be blank: $ "));
+  // throw error if input is not currency
+  while (regexCurrenyCheck.test(amount) === false) {
+    amount = readlineSync.question(colors.yellow("Amount entered not valid: $ "));
   }
 
   // record transaction
   currentUser["log"].push(['deposit', amount, Date.now()]);
 
+  // update balance
+  calculateAccountBalance()
+
   // print confirmation message
-  console.log("\n" + "You have deposited $" + amount);
+  console.log(colors.green("\n" + "You have deposited $" + amount));
 
   showMenu();
 };
@@ -97,21 +102,23 @@ function makeWithdrawl() {
   // capture user input
   let amount = readlineSync.question(plsDepositMsg);
 
-  // if amount is blank, throw error
-  while (amount === ""){
-    amount = readlineSync.question(colors.yellow("\nAmount can not be blank: $ "));
+  // throw error if input is not currency
+  while (regexCurrenyCheck.test(amount) === false) {
+    amount = readlineSync.question(colors.yellow("Amount entered not valid: $ "));
   }
 
+  // overdraft protection
   if (amount > currentUser["accountBalance"]) {
     console.log(colors.yellow("\nSorry, you do now have enough funds to withdrawal."));
   } else {
     // record transaction
     currentUser["log"].push(['withdrawal', amount, Date.now()]);
-
+    // update account balance
+    calculateAccountBalance()
     // print confirmation message
-    console.log("\n" + "You have withdrawn $" + amount);
+    console.log(colors.red("\n" + "You have withdrawn $" + amount));
   }
-  showMenu();
+    showMenu();
 }
 
 let viewTransactionHistory = function(){
@@ -138,9 +145,7 @@ let viewTransactionHistory = function(){
   showMenu();
 }
 
-function accountBalance() {
-  console.log(colors.bold.underline("\nAccount Balance\n"));
-
+function calculateAccountBalance() {
   // if there is a transaction history
   if (currentUser["log"].length > 0) {
     // set amount to 0 to properly recalculate every time
@@ -165,10 +170,23 @@ function accountBalance() {
     } // end for loop
 
   } else {
+    currentUser["accountBalance"] = 0;
+  }
+}
+
+function showAccountBalance() {
+  console.log(colors.bold.underline("\nAccount Balance\n"));
+
+  calculateAccountBalance()
+
+  let amount = Math.round(currentUser["accountBalance"] * 100) / 100;
+  // if there is a transaction history
+  if (currentUser["log"].length > 0) {
+    // print account Balance
+    console.log(colors.yellow("Your account balance is: $" + amount));
+  } else {
     console.log(noTransactionsMsg)
   }
-  // print account Balance
-  console.log("Your account balance is: $" + colors.bold(currentUser["accountBalance"]));
 
   // take user back to main menu
   showMenu();
