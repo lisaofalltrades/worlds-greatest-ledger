@@ -1,6 +1,17 @@
 // require
-const readlineSync = require('readline-sync')
 const colors = require('colors');
+const readlineSync = require('readline-sync')
+
+// catching readlineSync exit issues
+process.on('SIGINT', function() {
+  console.log('\nI caught SIGINT signal.');
+  process.exit();
+});
+
+process.on('SIGTERM', function() {
+  console.log('\nI caught SIGTERM signal.');
+  process.exit();
+});
 
 // ******* //
 // classes //
@@ -234,6 +245,8 @@ function openLedger() {
   if (userSelection === 0) {
     // user login
     checkUser();
+  } else if (userSelection === -1) {
+    process.exit();
   }
 
 } // end openLedger
