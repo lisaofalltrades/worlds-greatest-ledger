@@ -1,4 +1,8 @@
 # World's Greatest Ledger
+
+<img src="assets/demo_loop.gif"
+alt="App Demo" width="600" height="400" border="10" />
+
 Welcome to the World's Greatest Ledger where a user can:
 - create an account
 - log in
