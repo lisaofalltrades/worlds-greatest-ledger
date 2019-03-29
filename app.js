@@ -67,6 +67,11 @@ function makeDeposit(){
   // capture user input
   let amount = readlineSync.question(plsDepositMsg);
 
+  // if amount is blank, throw error
+  while (amount === ""){
+    amount = readlineSync.question(colors.yellow("Amount can not be blank: $ "));
+  }
+
   // record transaction
   currentUser["log"].push(['deposit', amount, Date.now()]);
 
@@ -80,6 +85,11 @@ function makeWithdrawl() {
   console.log(colors.bold.underline("\nMake a Withdrawal\n"));
   // capture user input
   let amount = readlineSync.question(plsDepositMsg);
+
+  // if amount is blank, throw error
+  while (amount === ""){
+    amount = readlineSync.question(colors.yellow("Amount can not be blank: $ "));
+  }
 
   // record transaction
   currentUser["log"].push(['withdrawal', amount, Date.now()]);
@@ -156,29 +166,41 @@ function checkPassword() {
 
 // user login
 function checkUser() {
-  let passwordCount = 0;
+
+  let passwordCount = 2;
   // prompt for username
   let username = readlineSync.question("Please enter your username: ");
 
-  // if user is in usersData
-  if(username === ""){
-    readlineSync.question("Username can not be blank: ");
+  // if username is blank, throw error
+  while (username === ""){
+    username = readlineSync.question("Username can not be blank: ");
   }
 
   // prompt for password
   let password = readlineSync.question("Please enter your password: ", { hideEchoBack: true });
 
+  // if user is in usersData
   if (usersData[username]) {
     // check password
     console.log("Please wait while we verify your account...");
-    if (usersData[username]["password"] !== password) {
-      checkPassword();
-      passwordCount +=1;
+
+    while(passwordCount > 0){
+
+      if(usersData[username]["password"] === password){
+        console.log("logging in...");
+        currentUser = usersData[username];
+        showMenu();
+      } else {
+        password = readlineSync.question("Incorrect Password. Please enter your password again: ", { hideEchoBack: true });
+        passwordCount--;
+      }
     }
-    // else if(passwordCount >= 4){
-    //     console.log("You have reached the maximum number of tries. Please try again later");
-    //     openLedger();
-    // }
+
+    if(passwordCount === 0){
+      console.log(colors.yellow("You have reached maximum number of tries!"));
+      openLedger();
+    }
+
   } else { // if user is not in usersData, create account
     console.log("\nCreating account...\n");
     usersData[username] = new User (username, password);
@@ -189,8 +211,6 @@ function checkUser() {
     console.log("Success! Welcome " + username + "!");
     // assign current user
     currentUser = usersData[username];
-    // console.log(currentUser);
-    // console.log(usersData);
   }
   showMenu();
 } // end user login
@@ -198,10 +218,19 @@ function checkUser() {
 
 
 function openLedger() {
+  // clear current user if any?
+  currentUser = {}
   // weclome message
   console.log("\n" + starDivider + "Welcome to the World's Greatest Ledger" + starDivider + "\n");
-  // user login
-  checkUser();
+  console.log("Please select an option below:");
+  // log in or quit program
+  let userSelection = readlineSync.keyInSelect(["Log In/Create Account"]);
+
+  if (userSelection === 0) {
+    // user login
+    checkUser();
+  }
+
 } // end openLedger
 
 openLedger();
