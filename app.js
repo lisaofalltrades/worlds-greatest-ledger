@@ -130,7 +130,6 @@ let viewTransactionHistory = function(){
 function accountBalance() {
   console.log(colors.bold.underline("\nAccount Balance\n"));
 
-
   // if there is a transaction history
   if (currentUser["log"].length > 0) {
     // set amount to 0 to properly recalculate every time
@@ -167,7 +166,7 @@ function accountBalance() {
 // user login
 function checkUser() {
   let regex = "^\\s+$";
-  
+
   let passwordCount = 2;
   // prompt for username
   let username = readlineSync.question("Please enter your username: ");
@@ -179,6 +178,11 @@ function checkUser() {
 
   // prompt for password
   let password = readlineSync.question("Please enter your password: ", { hideEchoBack: true });
+
+  // if password is blank, throw error
+  while (password === ""){
+    password = readlineSync.question("Password cannot be blank: ", { hideEchoBack: true });
+  }
 
   // if user is in usersData
   if (usersData[username]) {
