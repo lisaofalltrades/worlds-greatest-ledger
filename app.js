@@ -51,7 +51,7 @@ let starDivider = (" * ").repeat(5);
 // ********* //
 
 // user menu once logged in
-function showMenu(username) {
+function showMenu() {
   console.log(colors.bold.underline("\nMain Menu\n"));
   console.log(colors.bold("Please select from the options below: "));
   let index = readlineSync.keyInSelect(mainMenu)
