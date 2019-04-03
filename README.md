@@ -30,8 +30,7 @@ npm install
 node app.js
 ```
 
-
 ## Changelog
 
 ### 1.0 (03/29/2019)
-- First version of the World's Greatest app
+- First version of the World's Greatest Ledger app
